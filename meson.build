@@ -46,13 +46,16 @@ install_headers(
   jsoncpp_headers,
   subdir : 'json')
 
-if get_option('default_library') == 'shared' and meson.get_compiler('cpp').get_id() == 'msvc'
-  dll_export_flag = '-DJSON_DLL_BUILD'
-  dll_import_flag = '-DJSON_DLL'
+if get_option('default_library') == 'shared'
+  dll_export_flag = ['-DJSON_DLL_BUILD']
+  dll_import_flag = ['-DJSON_DLL']
 else
   dll_export_flag = []
   dll_import_flag = []
 endif
+
+cpp = meson.get_compiler('cpp')
+dll_export_flag += [cpp.first_supported_argument('-fvisibility=hidden')]
 
 jsoncpp_lib = library(
   'jsoncpp',
