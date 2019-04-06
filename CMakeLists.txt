@@ -76,6 +76,7 @@ option(JSONCPP_WITH_WARNING_AS_ERROR "Force compilation to fail if a warning occ
 option(JSONCPP_WITH_STRICT_ISO "Issue all the warnings demanded by strict ISO C and ISO C++" ON)
 option(JSONCPP_WITH_PKGCONFIG_SUPPORT "Generate and install .pc files" ON)
 option(JSONCPP_WITH_CMAKE_PACKAGE "Generate and install cmake package files" ON)
+option(JSONCPP_VISIBILITY_HIDDEN "Build with default hidden visibility" ON)
 option(BUILD_SHARED_LIBS "Build jsoncpp_lib as a shared library." OFF)
 
 # Enable runtime search path support for dynamic libraries on OSX
@@ -145,6 +146,16 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 
     if(JSONCPP_WITH_STRICT_ISO AND NOT JSONCPP_WITH_WARNING_AS_ERROR)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    endif()
+endif()
+
+include(CheckCXXCompilerFlag)
+
+# Set default symbol visibility to 'hidden'
+if(JSONCPP_VISIBILITY_HIDDEN)
+    check_cxx_compiler_flag("-fvisibility=hidden" VISIBILITY_HIDDEN_SUPPORTED)
+    if (VISIBILITY_HIDDEN_SUPPORTED)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
     endif()
 endif()
 
