@@ -162,6 +162,7 @@ endfunction()
 # Set default symbol visibility to 'hidden'
 if(JSONCPP_VISIBILITY_HIDDEN)
     CxxAppendCompilerFlag("-fvisibility=hidden")
+    CxxAppendCompilerFlag("-fvisibility-inlines-hidden")
 endif()
 
 find_program(CCACHE_FOUND ccache)
