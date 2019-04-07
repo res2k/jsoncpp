@@ -56,6 +56,7 @@ endif
 
 cpp = meson.get_compiler('cpp')
 dll_export_flag += [cpp.first_supported_argument('-fvisibility=hidden')]
+dll_export_flag += [cpp.first_supported_argument('-fvisibility-inlines-hidden')]
 
 jsoncpp_lib = library(
   'jsoncpp',
