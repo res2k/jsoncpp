@@ -150,13 +150,18 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 endif()
 
 include(CheckCXXCompilerFlag)
+function(CxxAppendCompilerFlag flagstr)
+    string(TOUPPER "${flagstr}" auto_flag_var)
+    string(REGEX REPLACE "[^A-Z0-9]" "_" auto_flag_var "${auto_flag_var}")
+    check_cxx_compiler_flag("${flagstr}" CXX_${auto_flag_var})
+    if(CXX_${auto_flag_var})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flagstr}" PARENT_SCOPE)
+    endif()
+endfunction()
 
 # Set default symbol visibility to 'hidden'
 if(JSONCPP_VISIBILITY_HIDDEN)
-    check_cxx_compiler_flag("-fvisibility=hidden" VISIBILITY_HIDDEN_SUPPORTED)
-    if (VISIBILITY_HIDDEN_SUPPORTED)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-    endif()
+    CxxAppendCompilerFlag("-fvisibility=hidden")
 endif()
 
 find_program(CCACHE_FOUND ccache)
